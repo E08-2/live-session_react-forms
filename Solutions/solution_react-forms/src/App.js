@@ -51,12 +51,54 @@ const App = () => {
                 setGender(event.target.value);
                 break;
             case "consent":
-                console.log("Clicked!")
                 setConsent(event.target.value);
                 break;
             default:
                 break;
         }
+    }
+
+    // Handle the form being submitted
+    const submitForm = event => {
+        event.preventDefault();
+
+        // * Option 1: log all the user data from the form to the console
+
+        // console.log("Name", name);
+        // console.log("Age", age);
+        // console.log("Comment", comment);
+        // console.log("Gender", gender);
+        // console.log("Consent", consent);
+
+        // * Option 2: use fetch to POST the user's data to a server, and log the server's response
+
+        const userData = {
+            name: name,
+            age: age,
+            comment: comment,
+            gender: gender,
+            consent: consent
+        }
+
+        const settings = {
+            method: "POST",
+            body: JSON.stringify(userData),
+            headers: {
+                "Content-Type": "application/JSON"
+            }
+        }
+
+        fetch("https://jsonplaceholder.typicode.com/users", settings)
+        .then(response => response.json())
+        .then(data => {
+            console.log("Response from server", data);
+        })
+    
+        setName("");    // Reset the value of the "name" state variable / input element
+        setAge("");     // Same as above, for the "age" state variable
+        setComment(""); // Etc
+        setGender("female"); // Etc
+        setConsent(""); // Etc
     }
 
     return (
@@ -65,7 +107,7 @@ const App = () => {
                 <div className="heading_container">
                     <h2>My React Form</h2>
                 </div>
-                <form>
+                <form onSubmit={submitForm}>
                     {/* 
                     Making the input a controlled component:
 
